@@ -3,7 +3,7 @@ import './App.css'
 import Header from './components/Header';
 import API from './services/api';
 
-API.get("/about")
+API.get("/")
   .then(Response => console.log(Response.data))
   .catch(err => console.error(err));
 function App() {

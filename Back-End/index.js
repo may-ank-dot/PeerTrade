@@ -1,9 +1,14 @@
 import express from 'express';
 import cors from 'cors';
-import db from "./db/connect.js";
+import userRoutes from "./routes/userRoutes.js";
+import productRoutes from "./routes/listingRoutes.js";
+import bodyParser from 'body-parser';
 
 const app = express();
 const PORT = 3000;  
+
+app.use(express.json());
+app.use(bodyParser.urlencoded({extended: true}));
 
 // Cors to allow requests from the front-end
 app.use(cors({
@@ -11,15 +16,9 @@ app.use(cors({
     methods: ["GET","POST","PUT","DELETE"],
     credentials: true
 }))
+app.use("/users",userRoutes);
+app.use("/products",productRoutes);
 
-app.get("/about",async (req, res) => {
-    try{
-        const val = await db.query("SELECT * FROM students");
-        console.log(val.rows[0]);
-    } catch(err){
-        console.error(err);
-    }
-});
 
 app.listen(PORT,(err)=> {
     if(err) console.log(err);
