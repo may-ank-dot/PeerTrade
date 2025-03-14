@@ -1,6 +1,11 @@
 import { useState } from 'react'
+import {BrowserRouter as Router , Routes,Route} from "react-router-dom";
+import Home from './pages/Home';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Listings from './pages/Listings';
+import ListingDetails from './pages/ListingDetails';
 import './App.css'
-import Header from './components/Header';
 import API from './services/api';
 
 API.get("/")
@@ -11,8 +16,15 @@ function App() {
 
   return (
     <>
-      <Header />
-      <h1 className='text-red-200'>hello</h1>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />}/>
+        <Route path="/login" element={<Login/>}/>
+        <Route path="/register" element={<Register/>}/>
+        <Route path="/listings" element={<Listings/>}/>
+        <Route path="/listings/:id" element={<ListingDetails/>}/>
+      </Routes>
+    </Router>
     </>
   )
 }
