@@ -7,6 +7,7 @@ import Listings from './pages/Listings';
 import ListingDetails from './pages/ListingDetails';
 import './App.css'
 import API from './services/api';
+import ProtectedRoute from './components/ProtectedRoute';
 
 API.get("/")
   .then(Response => console.log(Response.data))
@@ -21,8 +22,10 @@ function App() {
         <Route path="/" element={<Home />}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/register" element={<Register/>}/>
-        <Route path="/listings" element={<Listings/>}/>
-        <Route path="/listings/:id" element={<ListingDetails/>}/>
+
+        // ProtectedRoute
+        <Route path="/listings" element={<ProtectedRoute><Listings/></ProtectedRoute>}/>
+        <Route path="/listings/:id" element={<ProtectedRoute><ListingDetails/></ProtectedRoute>}/>
       </Routes>
     </Router>
     </>
