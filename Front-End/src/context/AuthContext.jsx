@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState,useContext } from "react";
 
 const AuthContext = createContext(); // used to store authentication information 
 
@@ -16,7 +16,8 @@ const AuthProvider = ({children}) => {
 
     // Stores token in local storage
     const login = (token) => {
-        localStorage.setItem("token",token);
+        console.log("Login data recieved",token); //Debugging
+        localStorage.setItem("token",JSON.stringify(token));
         setUser({token});
     }
 
@@ -31,6 +32,6 @@ const AuthProvider = ({children}) => {
         </AuthContext.Provider>
     );
 };
-
+const useAuth = () => useContext(AuthContext);
 export default AuthContext ;
-export {AuthProvider};
+export {AuthProvider,useAuth};
