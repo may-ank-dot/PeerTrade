@@ -1,51 +1,39 @@
 import express from "express";
 import { getUserByEmail,createUser } from "../models/user.js";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-
+import passport from "../middleware/passportConfig.js";
 const router = express.Router();
 
 router.post("/register", async(req,res)=>{
-    const {name , email,password} = req.body;   
+    const {name , email, password} = req.body;   
     try{
         const userExists = await getUserByEmail(email);
         if(userExists) return res.status(400).json({message: "User already exists!"});
         const newUser = await createUser(name,email,password);
-        res.status(201).json(newUser);
+        res.status(201).json({user: newUser});
     } catch (error){
         res.status(500).json({error: "failed to create user"});
     }
 });
 
-router.post("/login", async(req,res) => {
-    try{
-        const {email , password} = req.body;
-        // Finding user by email
-        const user = await getUserByEmail(email);
-        if(!user) { return res.status(400).json({message: "Invalid credentials"})}
-        // Matching password
-        const isMatch = await bcrypt.compare(password,user.password);
-        if(!isMatch){ return res.status(400).json({message: "Invalid credentials"})}
-        // Generate JWT token
-        const token = jwt.sign({id: user.id,email: user.email},"jwt_token",{expiresIn: "1h"})
-        res.json({message: "Login succesfull",token: token,
-            user: {id: user.id ,name: user.name,email:user.email}
-        });
-    } catch(error) {
-        res.status(500).json({message: "Server error",error: error.message})
-    }
-})
+router.post("/login", passport.authenticate("local"), (req, res) => {
+    res.status(200).json({ user: req.user });
+});
 
-router.get("/:email", async(req,res) => {
-    try{
-        const user = await getUserByEmail(req.params.email);
-        if(!user){
-            res.status(404).json({error: "user not found!"});
-        }
-        res.json(user);
-    } catch(error) {
-        res.status(500).json({error: "Error fetching user"});
+router.post("/logout", (req, res) => {
+    req.logout(err => {
+        if (err) return res.status(500).json({ error: "Logout failed" });
+        res.json({ message: "Logged out successfully" });
+    });
+});
+
+
+router.get("/me", (req, res) => {
+    if (req.isAuthenticated()) {
+        res.json({ user: req.user });
+    } else {
+        res.status(401).json({ user: null });
     }
-})
+});
 
 export default router;

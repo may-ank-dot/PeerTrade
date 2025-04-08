@@ -1,14 +1,23 @@
 import express from 'express';
+import session from 'express-session';
 import cors from 'cors';
 import userRoutes from "./routes/userRoutes.js";
 import productRoutes from "./routes/listingRoutes.js";
 import bodyParser from 'body-parser';
+import passport from './middleware/passportConfig.js';
 
 const app = express();
 const PORT = 3000;  
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(session({
+    secret: "secretkey",
+    resave: false,
+    saveUninitialized: false
+}))
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Cors to allow requests from the front-end
 app.use(cors({

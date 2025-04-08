@@ -17,9 +17,6 @@ const Login = () => {
         try{
            const response = await API.post('/users/login',{email,password});
            console.log("login Success",response.data); 
-           // To store token in local storage
-           localStorage.setItem("token",response.data.token);
-           console.log(response);
            navigate("/listings");
         }catch(err){
             setError("Invalid email or password. Please try again.");
