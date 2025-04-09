@@ -1,7 +1,7 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import bcrypt from "bcrypt";
-import db from "../db/connect";
+import db from "../db/connect.js";
 
 passport.use(
     new LocalStrategy({usernameField: "email"},async (email,password,done)=>{
@@ -23,7 +23,7 @@ passport.serializeUser((user,done)=>{
 });
 passport.deserializeUser(async(id,done)=>{
     try{
-        const result = await db.query("SELECT * FROM user WHERE id=$1",[id]);
+        const result = await db.query("SELECT * FROM users WHERE id=$1",[id]);
         const user = result.rows[0];
         done(null ,user);
     } catch (err){

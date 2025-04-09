@@ -1,6 +1,7 @@
 import React,{useState} from "react";
 import API from "../services/api";
 import {useNavigate} from "react-router-dom";
+import {useAuth} from "../context/AuthContext";
 
 const Login = () => {
     const [email,setEmail] = useState("");
@@ -8,6 +9,7 @@ const Login = () => {
     const [loading,setLoading] = useState(false);
     const [error,setError] = useState("");
     const navigate = useNavigate();
+    const {login} = useAuth();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -17,6 +19,7 @@ const Login = () => {
         try{
            const response = await API.post('/users/login',{email,password});
            console.log("login Success",response.data); 
+           login(response.data);
            navigate("/listings");
         }catch(err){
             setError("Invalid email or password. Please try again.");
