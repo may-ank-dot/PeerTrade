@@ -22,6 +22,7 @@ const createTables = async () => {
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );     
         `);
+        await db.query(`ALTER TABLE listings ADD COLUMN user_id UUID REFERENCES users(id);`)
         console.log("Tables created succesfully!");
         } catch (error){
             console.error(error);

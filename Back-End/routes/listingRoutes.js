@@ -1,12 +1,14 @@
 import express from "express";
-import { createListings,getAllListings,deleteListings,getListingById,updateListingById} from "../models/listing.js";
+import { createListings,getAllListings,deleteListings,getListingById,getListingByUserId,updateListingById} from "../models/listing.js";
+import ensureAuthenticated from "../middleware/ensureAuthenticated.js"
 
 const router = express.Router();
 
-router.post("/", async (req,res) => {
+router.post("/",ensureAuthenticated, async (req,res) => {
     const {title, description, price, category , image_url} = req.body;
+    const user_id = req.user.id;
     try{
-        const newListing = await createListings(title, description, price, category , image_url);
+        const newListing = await createListings(title, description, price, category , image_url,user_id);
         res.status(201).json(newListing);
     } catch(error){
         res.status(500).json({error: "Failed to create Listing!"});
@@ -31,7 +33,15 @@ router.get("/:id",async(req,res)=>{
         res.status(500).json({error:"error getting lsiting by id"});
     }
 });
-
+router.get("/my",ensureAuthenticated,async(req,res)=>{
+    try{
+        const userId = req.user.id; 
+        const listings = await getListingByUserId(userId);
+        res.json(listings);
+    } catch(error){
+        res.status(500).json({error: "Failed to fetch user listings"});
+    }
+})
 router.put("/update/:id",async(req,res) => {
     try{
         const id = req.params;

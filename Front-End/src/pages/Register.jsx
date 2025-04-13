@@ -23,7 +23,7 @@ const Register = () => {
             navigate("/listings");
         } catch (error){
             console.error("Registration error",error);
-            setError("Registratin failed. Please try again.");
+            setError("Registration failed. Please try again.");
         } finally{
             setLoading(false);
         }

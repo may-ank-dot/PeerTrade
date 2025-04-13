@@ -14,7 +14,10 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(session({
     secret: "secretkey",
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie:{
+        sameSite:"lax",
+    }
 }))
 app.use(passport.initialize());
 app.use(passport.session());

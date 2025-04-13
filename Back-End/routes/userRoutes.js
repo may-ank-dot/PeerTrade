@@ -1,9 +1,9 @@
 import express from "express";
 import { getUserByEmail,createUser } from "../models/user.js";
-import bcrypt from "bcrypt";
 import passport from "../middleware/passportConfig.js";
-const router = express.Router();
+import ensureAuthenticated from "../middleware/ensureAuthenticated.js";
 
+const router = express.Router();
 router.post("/register", async(req,res)=>{
     const {name , email, password} = req.body;   
     try{
@@ -28,7 +28,7 @@ router.post("/logout", (req, res) => {
 });
 
 
-router.get("/me", (req, res) => {
+router.get("/me",ensureAuthenticated, (req, res) => {
     if (req.isAuthenticated()) {
         res.json({ user: req.user });
     } else {

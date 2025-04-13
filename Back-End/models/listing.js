@@ -1,10 +1,10 @@
 import db from "../db/connect.js";
 
-const createListings = async (title, description, price, category , image_url) => {
+const createListings = async (title, description, price, category , image_url,user_id) => {
     try{
         const result = await db.query(
-            "INSERT INTO listings(title,description,price,category,image_url) VALUES($1,$2,$3,$4,$5) RETURNING *"
-            ,[title , description, price,category,image_url]
+            "INSERT INTO listings(title,description,price,category,image_url,user_id) VALUES($1,$2,$3,$4,$5,$6) RETURNING *"
+            ,[title , description, price,category,image_url,user_id]
         );
         return result.rows[0];
     } catch(error) {
@@ -20,7 +20,14 @@ const getAllListings = async () => {
         console.error("Get listing not working",error);
     }
 } 
-
+const getListingByUserId = async(userId) => {
+    try{
+        const result = await db.query(`SELECT * FROM listings WHERE user_id = $1`, [userId])
+        return result.rows; 
+    } catch (error){
+        console.error("Error Listing user by id",error);
+    }
+}
 const getListingById = async (id) => {
     try{
         const result = await db.query("SELECT * FROM listings WHERE id = $1",[id]);
@@ -52,4 +59,4 @@ const deleteListings = (id) => {
 }
 
 // Reporting inappropriate listing (not now)
-export {createListings , getAllListings,getListingById,deleteListings,updateListingById};
+export {createListings , getAllListings, getListingById, deleteListings, updateListingById, getListingByUserId};
