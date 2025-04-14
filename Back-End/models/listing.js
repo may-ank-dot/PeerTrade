@@ -31,7 +31,7 @@ const getListingByUserId = async(userId) => {
 const getListingById = async (id) => {
     try{
         const result = await db.query("SELECT * FROM listings WHERE id = $1",[id]);
-        return result.rows[0];
+        return result;
     } catch(error){
         console.error("Listing by id not working",error);
     }

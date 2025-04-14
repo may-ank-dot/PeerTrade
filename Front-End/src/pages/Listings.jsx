@@ -22,7 +22,6 @@ const Listings = () => {
               <p>{listing.description}</p>
               <p className="text-green-600 font-bold mt-2">{listing.price}</p>
               <Link to={`/listings/${listing.id}`} className="text-blue-600 hover:underline mt-2 inline-block">View Details</Link>
-
             </div>
           ))}
         </div>

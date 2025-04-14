@@ -7,6 +7,7 @@ import ListingDetails from './pages/ListingDetails';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from "./components/Navbar";
 import MyListings from "./pages/MyListings";
+import AddListings from "./pages/AddListings";
 import './App.css'
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
         <Route path="/" element={<Home />}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/register" element={<Register/>}/>
+        <Route path="/addlistings" element={<AddListings/>}/>
         {/* ProtectedRoute */}
         <Route path="/listings" element={<ProtectedRoute><Listings/></ProtectedRoute>}/>
         <Route path="/mylistings" element={<ProtectedRoute><MyListings /></ProtectedRoute>}/>

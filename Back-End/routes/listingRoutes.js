@@ -9,7 +9,7 @@ router.post("/",ensureAuthenticated, async (req,res) => {
     const user_id = req.user.id;
     try{
         const newListing = await createListings(title, description, price, category , image_url,user_id);
-        res.status(201).json(newListing);
+        res.status(201).json({listing: newListing});
     } catch(error){
         res.status(500).json({error: "Failed to create Listing!"});
     }
@@ -26,10 +26,12 @@ router.get("/",async(req,res) => {
 
 router.get("/:id",async(req,res)=>{
     try{
-        const id = req.params;
-        const lisiting = await getListingById(id.id); 
-        res.status(201).json(lisiting);
+        const {id} = req.params;
+        const result = await getListingById(id); 
+        if(!result || result.rows.length === 0) return res.status(404).json({error: 'Listings not found'});
+        res.status(200).json({listing: result.rows[0]});
     } catch(error){
+        console.error("Error fetching listing:",error)
         res.status(500).json({error:"error getting lsiting by id"});
     }
 });
