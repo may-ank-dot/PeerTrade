@@ -1,7 +1,7 @@
 import db from "../db/connect.js";
-
 const createListings = async (title, description, price, category , image_url,user_id) => {
     try{
+        console.log(process.env.CLOUDINARY_KEY);
         const result = await db.query(
             "INSERT INTO listings(title,description,price,category,image_url,user_id) VALUES($1,$2,$3,$4,$5,$6) RETURNING *"
             ,[title , description, price,category,image_url,user_id]
