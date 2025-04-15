@@ -4,10 +4,9 @@ import ensureAuthenticated from "../middleware/ensureAuthenticated.js"
 import upload from "../middleware/cloudinaryStorage.js";
 
 const router = express.Router();
-
 router.post("/",ensureAuthenticated,upload.single("image"), async (req,res) => {
     const {title, description, price, category } = req.body;
-    const image_url = req.file?.path;
+    const image_url = req.file.path;
     const user_id = req.user.id;
     try{
         const newListing = await createListings(title, description, price, category , image_url,user_id);

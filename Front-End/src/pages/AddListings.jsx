@@ -3,21 +3,36 @@ import API from "../services/api";
 import { useNavigate } from "react-router-dom";
 
 const AddListings = () => {
-    const [FormData,setFormData] = useState({
+    const [formState,setFormState] = useState({
         title: "",
         description: "",
         price:"",
         category: "",
-        image_url: "",
     })
-    const navigate = useNavigate;
+    const [image,setImage] = useState(null);
+    const navigate = useNavigate();
+
     const handleChange = (e) => {
-        setFormData({...FormData,[e.target.name]: e.target.value});
+        setFormState({...formState,[e.target.name]: e.target.value});
     };
+    const handleImageChange = (e) => {
+        setImage(e.target.files[0]);
+    }
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const formData = new FormData();
+        formData.append("title",formState.title);
+        formData.append("description",formState.description);
+        formData.append("price",formState.price);
+        formData.append("category",formState.price);
+        formData.append("image",image);
         try{
-            await API.post('/products',FormData);
+            const response = await API.post('/products',formData,{
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
             navigate("/listings");
         } catch(error){
             console.error("Unable to create listings",error);
@@ -31,14 +46,14 @@ const AddListings = () => {
                     type="text" 
                     name="title" 
                     placeholder="Title" 
-                    value={FormData.title} 
+                    value={formState.title} 
                     onChange={handleChange} 
                     className="border p-2 w-full"
                 />
                 <textarea
                     name="description" 
                     placeholder="Description" 
-                    value={FormData.description} 
+                    value={formState.description} 
                     onChange={handleChange} 
                     className="border p-2 w-full"
                 />
@@ -46,7 +61,7 @@ const AddListings = () => {
                     type="number" 
                     name="price" 
                     placeholder="Price" 
-                    value={FormData.price} 
+                    value={formState.price} 
                     onChange={handleChange} 
                     className="border p-2 w-full"
                 />
@@ -54,16 +69,14 @@ const AddListings = () => {
                     type="text" 
                     name="category" 
                     placeholder="Category" 
-                    value={FormData.category} 
+                    value={formState.category} 
                     onChange={handleChange} 
                     className="border p-2 w-full"
                 />
                 <input 
-                    type="text" 
-                    name="image_url" 
-                    placeholder="image URL" 
-                    value={FormData.image_url} 
-                    onChange={handleChange} 
+                    type="file" 
+                    name="image" 
+                    onChange={handleImageChange} 
                     className="border p-2 w-full"
                 />
                 <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">Create</button>
