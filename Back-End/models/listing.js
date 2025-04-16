@@ -13,7 +13,7 @@ const createListings = async (title, description, price, category , image_url,us
 
 const getAllListings = async () => {
     try{
-        const result = await db.query("SELECT * FROM listings");
+        const result = await db.query("SELECT * FROM listings ORDER BY id DESC");
         return result.rows;
     } catch(error){
         console.error("Get listing not working",error);
