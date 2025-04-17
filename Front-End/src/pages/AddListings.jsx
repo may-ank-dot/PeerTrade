@@ -25,7 +25,7 @@ const AddListings = () => {
         formData.append("title",formState.title);
         formData.append("description",formState.description);
         formData.append("price",formState.price);
-        formData.append("category",formState.price);
+        formData.append("category",formState.category);
         formData.append("image",image);
         try{
             const response = await API.post('/products',formData,{
