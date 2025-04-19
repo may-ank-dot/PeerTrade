@@ -27,6 +27,7 @@ const getListingByUserId = async(userId) => {
         console.error("Error Listing user by id",error);
     }
 }
+
 const getListingById = async (id) => {
     try{
         const result = await db.query("SELECT * FROM listings WHERE id = $1",[id]);
@@ -46,6 +47,10 @@ const updateListingById = async (id,title,description,price,category,image_url) 
     } catch(error){
         console.error("Error while updating Listings",error);
     }
+}
+
+// Searching and filtering 
+const searchListings = async (query,category) =>{
 }
 
 const deleteListings = (id) => {

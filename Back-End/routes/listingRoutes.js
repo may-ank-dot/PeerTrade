@@ -25,6 +25,16 @@ router.get("/",async(req,res) => {
     }
 });
 
+router.get("/search",async(req,res)=>{
+    try{
+        const {query,category} = req.body;
+        const listings = await searchListings(query,category);
+        res.status(200).json(listings);
+    } catch(error){
+        res.status(500).json({error:"Error Fetching data for search"});
+    }
+    
+});
 router.get("/:id",async(req,res)=>{
     try{
         const {id} = req.params;
