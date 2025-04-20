@@ -27,7 +27,7 @@ router.get("/",async(req,res) => {
 
 router.get("/search",async(req,res)=>{
     try{
-        const {query,category} = req.body;
+        const {query,category} = req.query;
         const listings = await searchListings(query,category);
         res.status(200).json(listings);
     } catch(error){

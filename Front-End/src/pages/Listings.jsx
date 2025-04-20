@@ -1,8 +1,11 @@
-import React,{useEffect,useState} from "react";
+import React,{use, useEffect,useState} from "react";
 import API from "../services/api";
-import { Link } from "react-router-dom";
+import { Link , useNavigate } from "react-router-dom";
 const Listings = () => {
   const [Listing,setListing] = useState([]);
+  const [query,setQuery] = useState("");
+  const [category,setCategory] = useState("");
+  const navigate = useNavigate();
   useEffect(() => {
     API.get("/products")
     .then((res)=>{
@@ -12,7 +15,32 @@ const Listings = () => {
       console.error("Error Fectching listings",error);
     })
   },[]) 
-    return(<div className="bg-red-300">
+  const handleSearch = (e) => {
+    e.preventDefault();
+    navigate(`/listings/search?query=${query}&category=${category}`);
+  };
+    return(<div className="p-4">
+      <form onSubmit={handleSearch} className="flex gap-4 mb-4">
+        <input 
+          type="text"
+          placeholder="Search..."
+          value={query}
+          onChange={(e)=>setQuery(e.target.value)}
+          className="border px-2 py-1"
+        />
+        <select
+          value={category}
+          onChange={(e)=>setCategory(e.target.value)}
+          className="border px-2 py-1"
+        >
+          <option value="">All Categories</option>
+          <option value="books">Books</option>
+          <option value="electronics">Electronics</option>
+          <option value="fashion">Fashion</option>
+          <option value="services">Services</option>
+        </select> 
+        <button className="bg-blue-500 text-white px-4 py-1 rounded">Search</button>
+      </form>
       <div className="p-4 mx-auto max-w-6xl">
         <h1 className="text-2xl font-semibold mb-4">Latest Listings</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">

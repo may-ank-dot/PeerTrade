@@ -51,6 +51,24 @@ const updateListingById = async (id,title,description,price,category,image_url) 
 
 // Searching and filtering 
 const searchListings = async (query,category) =>{
+    try{
+        let sql = "SELECT * FROM listings WHERE 1=1";   
+        const values = [];
+        if(query){
+            sql += " AND (title ILIKE $1 OR description ILIKE $2)";
+            values.push(`%${query}%`,`%${query}%`);
+        }
+        if(category){
+            sql += query ? "AND category = $3" : "AND category = $1";
+            values.push(category);
+        }
+        const result = await db.query(sql,values);
+        return result.rows;
+    } catch(error){
+        console.error("Error while fetching data for search listing");
+        throw error;
+    }
+    
 }
 
 const deleteListings = (id) => {
@@ -63,4 +81,4 @@ const deleteListings = (id) => {
 }
 
 // Reporting inappropriate listing (not now)
-export {createListings , getAllListings, getListingById, deleteListings, updateListingById, getListingByUserId};
+export {createListings,searchListings , getAllListings, getListingById, deleteListings, updateListingById, getListingByUserId};

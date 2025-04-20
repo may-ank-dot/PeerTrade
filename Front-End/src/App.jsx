@@ -9,6 +9,7 @@ import Navbar from "./components/Navbar";
 import MyListings from "./pages/MyListings";
 import AddListings from "./pages/AddListings";
 import './App.css'
+import SearchListings from "./pages/SearchListings";
 
 function App() {
 
@@ -21,8 +22,9 @@ function App() {
         <Route path="/login" element={<Login/>}/>
         <Route path="/register" element={<Register/>}/>
         <Route path="/addlistings" element={<AddListings/>}/>
+        <Route path="/listings/search" element={<SearchListings/>}/>
+        <Route path="/listings" element={<Listings/>}/>
         {/* ProtectedRoute */}
-        <Route path="/listings" element={<ProtectedRoute><Listings/></ProtectedRoute>}/>
         <Route path="/mylistings" element={<ProtectedRoute><MyListings /></ProtectedRoute>}/>
         <Route path="/listings/:id" element={<ProtectedRoute><ListingDetails/></ProtectedRoute>}/>
       </Routes>
