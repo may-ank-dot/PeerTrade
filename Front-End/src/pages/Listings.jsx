@@ -41,7 +41,7 @@ const Listings = () => {
         </select> 
         <button className="bg-blue-500 text-white px-4 py-1 rounded">Search</button>
       </form>
-      <div className="p-4 mx-auto max-w-6xl">
+      <div className="p-4 mx-auto">
         <h1 className="text-2xl font-semibold mb-4">Latest Listings</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
           {Listing.map((listing)=>(
