@@ -21,10 +21,10 @@ function App() {
         <Route path="/" element={<Home />}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/register" element={<Register/>}/>
-        <Route path="/addlistings" element={<AddListings/>}/>
         <Route path="/listings/search" element={<SearchListings/>}/>
         <Route path="/listings" element={<Listings/>}/>
         {/* ProtectedRoute */}
+        <Route path="/addlistings" element={<ProtectedRoute><AddListings/></ProtectedRoute>}/>
         <Route path="/mylistings" element={<ProtectedRoute><MyListings /></ProtectedRoute>}/>
         <Route path="/listings/:id" element={<ProtectedRoute><ListingDetails/></ProtectedRoute>}/>
       </Routes>

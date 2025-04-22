@@ -3,9 +3,8 @@ import API from "../services/api";
 
 const MyListings = () => {
     const [myListings,setMyListings] = useState([]);
-
     useEffect(() => {
-        API.get("/listings/my",{withCredentials:true})
+        API.get("/products/my",{withCredentials:true})
             .then(res=>setMyListings(res.data))
             .catch(err=>console.error("failed to fetch your lisitings",err));
     },[]);

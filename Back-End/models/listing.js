@@ -54,12 +54,14 @@ const searchListings = async (query,category) =>{
     try{
         let sql = "SELECT * FROM listings WHERE 1=1";   
         const values = [];
+        let index = 1;
         if(query){
-            sql += " AND (title ILIKE $1 OR description ILIKE $2)";
+            sql += ` AND (title ILIKE $${index} OR description ILIKE $${index+1})` ;
             values.push(`%${query}%`,`%${query}%`);
+            index += 2;
         }
         if(category){
-            sql += query ? "AND category = $3" : "AND category = $1";
+            sql += ` AND category = $${index}`;
             values.push(category);
         }
         const result = await db.query(sql,values);

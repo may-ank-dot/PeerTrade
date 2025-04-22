@@ -30,7 +30,7 @@ const Login = () => {
     }
     
     return(
-        <div className="flex bg-gray-900  justify-center items-center  h-screen">
+        <div className="flex bg-gray-900  justify-center items-center h-screen">
             <form onSubmit={handleSubmit} className="flex flex-col px-20 py-10 shadow-md shadow-gray-500 rounded-md">
                 <h2 className="flex justify-center px-32 py-8 text-white text-6xl font-bold mb-4 ">
                     <SplitText text="Login" />    

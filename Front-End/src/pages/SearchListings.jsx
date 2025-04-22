@@ -13,9 +13,9 @@ const SearchListings = () => {
     const [listings,setListings] = useState([]);
     
     useEffect(()=>{
-        API.get(`/products/search?query=${search|| ""} & category=${category || ""}`)
+        API.get(`/products/search?query=${search|| ""}&category=${category || ""}`)
         .then((res)=> setListings(res.data))
-        .catch((error) => console.error("Error Fetching data using Search"));
+        .catch((error) => console.error("Error Fetching data using Search",error));
     },[search,category]);
     return(
         <div className="p-4">
@@ -23,13 +23,13 @@ const SearchListings = () => {
             {listings.length === 0 ? (
                 <p>No listings found</p>
             ) : (
-                listings.map((listings)=>(
-                    <div key={listings.id} className="border p-4 mb-4">
-                        <h3 className="text-xl font-semibold">{listings.title}</h3>
-                        <p>{listings.description}</p>
-                        <p>{listings.price}</p>
-                        <p className="text-sm text-gray-500">{listings.category}</p>
-                        <img src={listings.image_url} alt={listings.title} className="w-32 mt-2"/>
+                listings.map((listing)=>(
+                    <div key={listing.id} className="border p-4 mb-4">
+                        <h3 className="text-xl font-semibold">{listing.title}</h3>
+                        <p>{listing.description}</p>
+                        <p>{listing.price}</p>
+                        <p className="text-sm text-gray-500">{listing.category}</p>
+                        <img src={listing.image_url} alt={listing.title} className="w-32 mt-2"/>
                     </div>
                 ))
             )}

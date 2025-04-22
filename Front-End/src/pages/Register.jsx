@@ -55,7 +55,7 @@ const Register = () => {
                     onChange={(e)=>setPassword(e.target.value)} 
                 />
 
-                <button type="submit" disabled={loading} className="bg bg-green-500 text-white px-4 py-2 rounded hover:bg-green-200">
+                <button type="submit" disabled={loading} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
                     {loading ? "Registering..." : "Register"}
                 </button>
             </form>

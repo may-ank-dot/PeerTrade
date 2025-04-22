@@ -1,5 +1,5 @@
 import express from "express";
-import { createListings,getAllListings,deleteListings,getListingById,getListingByUserId,updateListingById} from "../models/listing.js";
+import { createListings,searchListings,getAllListings,deleteListings,getListingById,getListingByUserId,updateListingById} from "../models/listing.js";
 import ensureAuthenticated from "../middleware/ensureAuthenticated.js"
 import upload from "../middleware/cloudinaryStorage.js";
 
@@ -31,6 +31,7 @@ router.get("/search",async(req,res)=>{
         const listings = await searchListings(query,category);
         res.status(200).json(listings);
     } catch(error){
+        console.error("Backend error in /search route",error.message);
         res.status(500).json({error:"Error Fetching data for search"});
     }
     
@@ -50,6 +51,7 @@ router.get("/my",ensureAuthenticated,async(req,res)=>{
     try{
         const userId = req.user.id; 
         const listings = await getListingByUserId(userId);
+        console.log(listings);
         res.json(listings);
     } catch(error){
         res.status(500).json({error: "Failed to fetch user listings"});
