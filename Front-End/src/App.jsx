@@ -12,7 +12,6 @@ import './App.css'
 import SearchListings from "./pages/SearchListings";
 
 function App() {
-
   return (
     <>
     <Router>
