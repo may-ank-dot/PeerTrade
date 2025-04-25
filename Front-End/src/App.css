@@ -1,7 +1,18 @@
+body{
+  overflow: hidden;
+}
 .home{
     width: 90%;
     margin: auto;
 }
 .searchCategory{
     color: black;
+}
+.logo{
+    filter: brightness(3) contrast(1.1);
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+.logo:hover {
+  transform: scale(1.05);
+  filter: brightness(4) contrast(1.2);
 }

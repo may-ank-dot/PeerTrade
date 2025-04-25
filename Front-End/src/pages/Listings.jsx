@@ -43,7 +43,7 @@ const Listings = () => {
       </form>
       <div className="p-4 mx-auto">
         <h1 className="text-2xl  font-semibold mb-4">Latest Listings</h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 ">
           {Listing.map((listing)=>(
             <div key={listing.id} className="border bg-gray-600 p-4 rounded shadow">
               {listing.image_url &&(

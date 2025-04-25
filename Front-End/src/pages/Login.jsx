@@ -20,7 +20,7 @@ const Login = () => {
            const response = await API.post('/users/login',{email,password});
            console.log("login Success"); 
            login(response.data);
-           navigate("/listings");
+           navigate("/");
         }catch(err){
             setError("Invalid email or password. Please try again.");
             console.error("Login Error",err);

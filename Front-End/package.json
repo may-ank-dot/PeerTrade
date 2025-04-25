@@ -13,6 +13,7 @@
     "@react-spring/web": "^9.7.5",
     "@tailwindcss/vite": "^4.0.15",
     "axios": "^1.8.1",
+    "framer-motion": "^12.7.4",
     "heroui-cli": "^1.2.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

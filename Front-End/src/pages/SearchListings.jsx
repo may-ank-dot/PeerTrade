@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation , Link} from "react-router-dom";
 import API from "../services/api";
 
 const useQuery = () => {
@@ -11,7 +11,7 @@ const SearchListings = () => {
     const search = query.get("query");
     const category = query.get("category");
     const [listings,setListings] = useState([]);
-    
+
     useEffect(()=>{
         API.get(`/products/search?query=${search|| ""}&category=${category || ""}`)
         .then((res)=> setListings(res.data))
@@ -23,16 +23,24 @@ const SearchListings = () => {
             {listings.length === 0 ? (
                 <p>No listings found</p>
             ) : (
-                listings.map((listing)=>(
-                    <div key={listing.id} className="border p-4 mb-4">
-                        <h3 className="text-xl font-semibold">{listing.title}</h3>
-                        <p>{listing.description}</p>
-                        <p>{listing.price}</p>
-                        <p className="text-sm text-gray-500">{listing.category}</p>
-                        <img src={listing.image_url} alt={listing.title} className="w-32 mt-2"/>
-                    </div>
-                ))
-            )}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 ">
+                {listings.map((listing)=> (
+                <div key={listing.id}  className="bg-gray-700 p-4 rounded shadow max-w-md w-full">
+              {listing.image_url &&(
+                <img
+                  src={listing.image_url}
+                  alt={listing.title}
+                  className="w-full h-40 object-cover rounded mb-3"
+                />
+              )}
+              <h2 className="text-xl font-semibold text-white">{listing.title}</h2> 
+              <p className="text-sm text-white mb-1">{listing.description}</p>
+              <p className="text-green-600 font-bold mt-2">₹{listing.price}</p>
+              <Link to={`/listings/${listing.id}`} className="text-sm text-red-500 hover:underline mt-2 inline-block">View Details</Link>
+            </div>
+          ))}
+              </div>
+        )}
         </div>
     )
 }
