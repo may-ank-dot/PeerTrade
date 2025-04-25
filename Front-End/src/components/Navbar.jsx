@@ -17,7 +17,7 @@ const Navbar = () => {
         <nav className="bg-gray-800 text-white px-4  flex justify-between items-center">
             <Link to="/" className="font-bold">
                 <img src="../../logoo.png" className="logo h-15 w-15 inline-flex justify-center"/>
-                <p className="inline-block transition-all duration-300 hover:scale-130 ">PeerTrade</p>
+                <p className="inline-block transition-all duration-300 delay-250 ease-in-out hover:scale-130 ">PeerTrade</p>
             </Link>
 
            <div className="flex gap-4 items-center">

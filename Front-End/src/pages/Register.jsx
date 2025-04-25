@@ -30,8 +30,8 @@ const Register = () => {
     }
 
     return(<div>
-        <div className="flex justify-center items-center h-screen bg-gray-900">
-            <form onSubmit={handleSubmit} className="flex flex-col px-20 py-10 shadow-md shadow-gray-500 rounded-md">
+        <div className="flex justify-center items-center h-screen bg-gray-900 bg-[url(../../public/1234.jpg)] bg-blend-darken bg-cover bg-center bg-no-repeat">
+            <form onSubmit={handleSubmit} className="flex flex-col px-15 py-5 shadow-md shadow-gray-500 rounded-md">
                 <h2 className="flex justify-center text-white text-6xl px-32 py-6 font-bold mb-4">
                    <SplitText text="Register"/> 
                 </h2>
@@ -55,7 +55,10 @@ const Register = () => {
                     onChange={(e)=>setPassword(e.target.value)} 
                 />
 
-                <button type="submit" disabled={loading} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
+                <button className="rounded-md border border-gray-500 bg-transparent  shadow-gray-500/20 text-white 
+                                    w-25 px-2 py-2 mt-2 hover:shadow-lg hover:bg-gray-700 
+                                    transition-all hover:scale-110 delay-150 duration-300 ease-in-out" 
+                    type="submit" disabled={loading}>
                     {loading ? "Registering..." : "Register"}
                 </button>
             </form>
