@@ -1,65 +1,88 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import API from "../services/api";
-import {useNavigate} from "react-router-dom";
-import {useAuth} from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import SplitText from "../components/inComp/SplitText";
+import { motion } from "framer-motion";
+import BlurText from "../components/inComp/BlurText";
+
 const Login = () => {
-    const [email,setEmail] = useState("");
-    const [password,setPassword] = useState("");
-    const [loading,setLoading] = useState(false);
-    const [error,setError] = useState("");
-    const navigate = useNavigate();
-    const {login} = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        setLoading(true);
-        setError("");
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+    setError("");
 
-        try{
-           const response = await API.post('/users/login',{email,password});
-           console.log("login Success"); 
-           login(response.data);
-           navigate("/");
-        }catch(err){
-            setError("Invalid email or password. Please try again.");
-            console.error("Login Error",err);
-        }finally{
-            setLoading(false);
-        }
+    try {
+      const response = await API.post('/users/login', { email, password });
+      console.log("login Success");
+      login(response.data);
+      navigate("/");
+    } catch (err) {
+      setError("Invalid email or password. Please try again.");
+      console.error("Login Error", err);
+    } finally {
+      setLoading(false);
     }
-    
-    return(
-        <div className="flex bg-gray-900  justify-center items-center h-screen bg-[url(../../public/1234.jpg)] bg-blend-darken bg-cover bg-center bg-no-repeat">
-            <form onSubmit={handleSubmit} className="flex flex-col px-15 py-5 shadow-md shadow-gray-500 rounded-md">
-                <h2 className="flex justify-center px-32 py-8 text-white text-6xl font-bold mb-4 ">
-                    <SplitText text="Login" />    
-                </h2>
-                {error && <p className="text-red-500">{error}</p>}
+  };
 
-                <label className="mb-1 text-xl text-white font-bold">Email</label>
-                <input className="border border-gray-600 px-3 py-2 rounded-2xl mb-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 bg-transparent"
-                    type="text" 
-                    name="email" 
-                    value={email} 
-                    onChange={(e)=>setEmail(e.target.value)}
-                />
-                <label className="mb-1 text-xl text-white font-bold">Password</label>
-                <input className="border border-gray-600 px-3 py-2 rounded-2xl mb-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 bg-transparent" 
-                    type="password" 
-                    name="password" 
-                    value={password} 
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-                <button className="rounded-md border border-gray-500 bg-transparent shadow-gray-500/20 text-white 
-                                    w-25 px-2 py-2 mt-2 hover:shadow-lg hover:bg-gray-700
-                                    transition-all hover:scale-110 delay-150 duration-300 ease-in-out" 
-                    type="submit" disabled={loading}>
-                    {loading ? "Loging in.." : "login"}
-                </button>
-            </form>
+  return (
+    <div className="flex justify-center items-center min-h-screen bg-gray-950 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-gray-900 to-black opacity-80"></div>
+
+      <motion.form
+        onSubmit={handleSubmit}
+        className="relative z-10 bg-gray-900 bg-opacity-70 p-10 rounded-2xl shadow-lg w-[90%] max-w-md flex flex-col items-center"
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      >
+        <h2 className="font-bold text-4xl">
+          <SplitText text="Login" />
+        </h2>
+
+        {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
+
+        <div className="w-full mb-5">
+          <label className="block mb-2 text-white font-semibold">Email</label>
+          <input
+            className="w-full px-4 py-2 rounded-lg bg-gray-800 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-500 outline-none"
+            type="text"
+            name="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email"
+          />
         </div>
-    )
-}
+
+        <div className="w-full mb-8">
+          <label className="block mb-2 text-white font-semibold">Password</label>
+          <input
+            className="w-full px-4 py-2 rounded-lg bg-gray-800 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-500 outline-none"
+            type="password"
+            name="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter your password"
+          />
+        </div>
+
+        <button
+          className="w-full py-3 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold transition-all hover:scale-105 duration-300 ease-in-out"
+          type="submit"
+          disabled={loading}
+        >
+          {loading ? "Logging in..." : "Login"}
+        </button>
+      </motion.form>
+    </div>
+  );
+};
 
 export default Login;

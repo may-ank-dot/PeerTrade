@@ -1,5 +1,13 @@
 body{
   background: rgb(17 24 39);
+  color: white;
+}
+li{
+  padding: 15px;
+}
+li:hover{
+  background-color: gray;
+  border-radius: 20px;
 }
 .home{
     width: 90%;

@@ -1,41 +1,45 @@
 import React from "react";
-import {Link,Navigate,useNavigate} from "react-router-dom";
-import {useAuth} from "../context/AuthContext";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
-    // get user and logout function
-    const {user,logout} = useAuth();
-    const navigate = useNavigate();
-    const handleLogout = () => {
-        logout();
-        navigate("/login");
-    }
-    const go = () =>{
-        navigate("/mylistings")
-    }
-    return (
-        <nav className="bg-gray-800 text-white px-4  flex justify-between items-center">
-            <Link to="/" className="font-bold">
-                <img src="../../logoo.png" className="logo h-15 w-15 inline-flex justify-center"/>
-                <p className="inline-block transition-all duration-300 delay-250 ease-in-out hover:scale-130 ">PeerTrade</p>
-            </Link>
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
-           <div className="flex gap-4 items-center">
-                {user ? (<>
-                    <Link to="/addlistings" className=" transition-all duration-300 hover:scale-130 ">AddProduct</Link>
-                    <Link to="/mylistings" className=" transition-all duration-300 hover:scale-130 ho">MyProducts</Link>
-                    <span>Welcome,{user.name}</span>
-                    <button onClick={handleLogout} className="bg-red-500 px-3 py-1 rounded hover:bg-red-600">
-                        Logout
-                    </button>
-                </>):(<>
-                    <Link to="/listings" className="transition-all duration-300 hover:scale-130">Products</Link>
-                    <Link to="/login" className="transition-all duration-300 hover:scale-130">Login</Link>
-                    <Link to="/register" className="transition-all duration-300 hover:scale-130">Register</Link>
-                </>)}
-            </div>
-        </nav> 
-    )
-}
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
+  return (
+    <nav className="fixed w-full top-0 left-0 z-50 bg-gray-900 text-white px-6 py-4 flex justify-between items-center shadow-md">
+      <Link to="/" className="flex items-center space-x-2">
+        <img src="/logoo.png" className="h-10 w-10" alt="PeerTrade Logo" />
+        <p className="text-2xl font-bold hover:scale-110 transition">PeerTrade</p>
+      </Link>
+
+      <div className="flex gap-6 items-center">
+        {user ? (
+          <>
+            <Link to="/addlistings" className="hover:text-teal-400 transition">Add Product</Link>
+            <Link to="/mylistings" className="hover:text-teal-400 transition">My Products</Link>
+            <span className="hidden sm:inline">Welcome, {user.name}</span>
+            <button
+              onClick={handleLogout}
+              className="bg-red-500 px-4 py-2 rounded hover:bg-red-600"
+            >
+              Logout
+            </button>
+          </>
+        ) : (
+          <>
+            <Link to="/login" className="hover:text-teal-400 transition">Login</Link>
+            <Link to="/register" className="hover:text-teal-400 transition">Register</Link>
+          </>
+        )}
+      </div>
+    </nav>
+  );
+};
 
 export default Navbar;

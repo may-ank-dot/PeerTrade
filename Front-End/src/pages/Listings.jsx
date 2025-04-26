@@ -1,67 +1,91 @@
-import React,{use, useEffect,useState} from "react";
+import React, { useEffect, useState } from "react";
 import API from "../services/api";
-import { Link , useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+
 const Listings = () => {
-  const [Listing,setListing] = useState([]);
-  const [query,setQuery] = useState("");
-  const [category,setCategory] = useState("");
-  const navigate = useNavigate();
+  const [listing, setListing] = useState([]);
+  const [query, setQuery] = useState("");
+  const [category, setCategory] = useState("");
+
   useEffect(() => {
     API.get("/products")
-    .then((res)=>{
-      setListing(res.data);
-    })
-    .catch((error)=>{
-      console.error("Error Fectching listings",error);
-    })
-  },[]) 
+      .then((res) => {
+        setListing(res.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching listings", error);
+      });
+  }, []);
+
   const handleSearch = (e) => {
     e.preventDefault();
     navigate(`/listings/search?query=${query}&category=${category}`);
   };
-    return(<div className="p-4 bg-gray-900 text-white h-screen">
-      <form onSubmit={handleSearch} className="flex gap-4 mb-4">
-        <input 
-          type="text"
-          placeholder="Search..."
-          value={query}
-          onChange={(e)=>setQuery(e.target.value)}
-          className="border border-white px-2 py-1"
-        />
-        <select
-          value={category}
-          onChange={(e)=>setCategory(e.target.value)}
-          className="border px-2 py-1"
-        >
-          <option value="" className="searchCategory">All Categories</option>
-          <option value="books" className="searchCategory">Books</option>
-          <option value="electronics" className="searchCategory">Electronics</option>
-          <option value="fashion" className="searchCategory">Fashion</option>
-          <option value="services" className="searchCategory">Services</option>
-        </select> 
-        <button className="bg-blue-500 text-white px-4 py-1 rounded">Search</button>
-      </form>
-      <div className="p-4 mx-auto">
-        <h1 className="text-2xl  font-semibold mb-4">Latest Listings</h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 ">
-          {Listing.map((listing)=>(
-            <div key={listing.id} className="border bg-gray-600 p-4 rounded shadow">
-              {listing.image_url &&(
+
+  return (
+    <div className="flex min-h-screen bg-gray-950 text-white">
+      <div className="flex-1 ml-64 p-8 overflow-auto">
+        {/* Search Bar at the Top */}
+        <div className="mb-6">
+          <form onSubmit={handleSearch} className="flex gap-4">
+            <input
+              type="text"
+              placeholder="Search..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="px-4 py-2 rounded bg-gray-800 focus:outline-none focus:ring-2 focus:ring-cyan-500 w-1/3"
+            />
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="px-4 py-2 rounded bg-gray-800 focus:outline-none focus:ring-2 focus:ring-cyan-500 w-1/3"
+            >
+              <option value="">All Categories</option>
+              <option value="books">Books</option>
+              <option value="electronics">Electronics</option>
+              <option value="fashion">Fashion</option>
+              <option value="services">Services</option>
+            </select>
+            <button
+              type="submit"
+              className="py-2 bg-cyan-500 hover:bg-cyan-600 rounded text-white font-semibold transition duration-300 w-1/3"
+            >
+              Search
+            </button>
+          </form>
+        </div>
+
+        {/* Listings */}
+        <h1 className="pt-15 text-4xl font-bold text-cyan-400 mb-8">Latest Listings</h1>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {listing.map((item) => (
+            <div
+              key={item.id}
+              className="bg-gray-800 rounded-lg shadow-md p-4 flex flex-col justify-between"
+            >
+              {item.image_url && (
                 <img
-                  src={listing.image_url}
-                  alt={listing.title}
-                  className="w-full h-40 object-cover rounded mb-3"
+                  src={item.image_url}
+                  alt={item.title}
+                  className="w-full h-40 object-cover rounded mb-4"
                 />
               )}
-              <h2 className="text-xl font-semibold">{listing.title}</h2> 
-              <p className="text-sm text-white mb-1">{listing.description}</p>
-              <p className="text-green-600 font-bold mt-2">₹{listing.price}</p>
-              <Link to={`/listings/${listing.id}`} className="text-sm text-red-500 hover:underline mt-2 inline-block">View Details</Link>
+              <h2 className="text-xl font-semibold mb-2">{item.title}</h2>
+              <p className="text-sm text-gray-300 mb-2">{item.description}</p>
+              <p className="text-green-400 font-bold mb-4">₹{item.price}</p>
+              <Link
+                to={`/listings/${item.id}`}
+                className="text-cyan-400 hover:underline text-sm font-semibold"
+              >
+                View Details
+              </Link>
             </div>
           ))}
         </div>
       </div>
-    </div>)
-}
+    </div>
+  );
+};
 
 export default Listings;
