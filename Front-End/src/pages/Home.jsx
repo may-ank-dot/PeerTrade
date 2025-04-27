@@ -1,26 +1,37 @@
-import React from "react";
+import React, { useContext } from "react";
 import BlurText from "../components/inComp/BlurText";
 import Threads from "../components/inComp/VertexShader";
-import {Link } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { SidebarContext } from "../context/SidebarContex";
+import ScrollVelocity from "../components/inComp/FramerMotion";
 
 const Home = () => {
+  const { collapsed } = useContext(SidebarContext);
+  const categoriesLine1 = [
+  "Books Electronics Fashion Stationery"
+];
+const categoriesLine2 = [
+  "Gadgets Sports Gear Services Furniture"
+];
   return (
-    <div className="relative min-h-screen bg-gray-950 overflow-x-hidden">
+    <div className={`relative min-h-screen bg-gray-950 overflow-x-hidden transition-all duration-300 ${
+      collapsed ? "ml-[70px] w-[95%]" : "ml-[260px] "
+    }`}>
 
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-gray-900 to-black opacity-80"></div>
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 ">
         <Threads />
       </div>
 
-      <div className="relative z-10 ml-4 md:ml-2 p-6">
+      <div className="relative z-10 ml-4 md:ml-2 py-6">
 
-        <div className="flex flex-col justify-center items-center min-h-[90vh] text-center">
+        <div className="flex  flex-col justify-center items-center min-h-[75vh] text-center">
           <BlurText
             text="PeerTrade"
-            className="text-8xl md:text-9xl font-bold tracking-widest  hover:scale-110 transition duration-500 hover:text-cyan-400"
+            className="text-9xl font-bold tracking-widest hover:scale-150 transition duration-500 hover:text-cyan-400"
           />
 
-          <p className="mt-8 italic text-blue-300 text-2xl hover:underline">
+          <p className="mt-8 italic text-blue-300 text-2xl">
             Rent, sell, or buy from your peers in seconds...
           </p>
 
@@ -32,7 +43,8 @@ const Home = () => {
             </Link>
           </div>
         </div>
-
+        <ScrollVelocity texts={categoriesLine1} className="text-5xl font-semibold lex"/>
+        <ScrollVelocity texts={categoriesLine2} velocity={-92} className="text-5xl font-semibold lex"/>
         <div className="mt-32 max-w-5xl mx-auto text-center">
           <h2 className="text-4xl font-bold mb-6 text-white">Why PeerTrade?</h2>
           <p className="text-gray-400 leading-8 px-6">
@@ -51,7 +63,7 @@ const Home = () => {
             </div>
             <div className="bg-gray-800 p-6 rounded-lg hover:scale-105 transition text-center">
               <h3 className="text-2xl text-cyan-400 font-semibold mb-4">Zero Commission</h3>
-              <p className="text-gray-400">100% of the price goes to the seller. PeerTrade doesn’t charge anything!</p>
+              <p className="text-gray-400">100% of the price goes to the seller. PeerTrade doesn't charge anything!</p>
             </div>
             <div className="bg-gray-800 p-6 rounded-lg hover:scale-105 transition text-center">
               <h3 className="text-2xl text-cyan-400 font-semibold mb-4">Smart Search</h3>

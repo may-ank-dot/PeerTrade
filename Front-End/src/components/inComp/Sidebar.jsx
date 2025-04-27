@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Home, Box, Layout , ChevronRight,ChevronLeft } from "react-feather";
+import { Home, Box, Layout, ChevronRight, ChevronLeft } from "react-feather";
+import { SidebarContext } from "../../context/SidebarContex";
 
 const Sidebar = () => {
-  const [collapsed, setCollapsed] = useState(false);
+  const { collapsed, setCollapsed } = useContext(SidebarContext);
 
   const menuItems = [
     { name: "Home", icon: <Home size={22} />, path: "/" },
@@ -22,11 +23,10 @@ const Sidebar = () => {
       <div className="flex justify-end px-3 pt-4">
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="hover:text-teal-400 transition"
+          className="hover:text-teal-400 transition "
         > 
-        {!collapsed && <ChevronLeft size={24} />}
-        {collapsed && <ChevronRight size={24} />}
-            
+          {!collapsed && <ChevronLeft size={24} />}
+          {collapsed && <ChevronRight size={24} />}
         </button>
       </div>
       <nav className="flex flex-col gap-6 mt-6">

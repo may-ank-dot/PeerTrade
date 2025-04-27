@@ -2,6 +2,10 @@ body{
   background: rgb(17 24 39);
   color: white;
 }
+.lex{
+  font-family: "Rubik", sans-serif;
+  font-weight: 400;
+}
 li{
   padding: 15px;
 }

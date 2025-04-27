@@ -12,11 +12,14 @@ import './App.css'
 import SearchListings from "./pages/SearchListings";
 import Dashboard from "./pages/Dashboard";
 import Sidebar from "./components/inComp/Sidebar";
+import { SidebarProvider } from "./context/SidebarContex";
 
 function App() {
   return (
     <Router>
-      <Layout />
+      <SidebarProvider>
+        <Layout />
+      </SidebarProvider>
     </Router>
   );
 }
@@ -24,7 +27,7 @@ function App() {
 const Layout = () => {
   const location = useLocation();
   const isAuthPage = location.pathname === '/login' || location.pathname === '/register';
-
+  
   return (
     <>
       <Navbar />
