@@ -47,11 +47,10 @@ router.get("/:id",async(req,res)=>{
         res.status(500).json({error:"error getting lsiting by id"});
     }
 });
-router.get("/my",ensureAuthenticated,async(req,res)=>{
+router.get("/my/:id",async(req,res)=>{
     try{
         const userId = req.user.id; 
         const listings = await getListingByUserId(userId);
-        console.log(listings);
         res.json(listings);
     } catch(error){
         res.status(500).json({error: "Failed to fetch user listings"});

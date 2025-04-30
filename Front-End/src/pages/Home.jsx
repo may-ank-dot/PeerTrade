@@ -25,20 +25,20 @@ const categoriesLine2 = [
 
       <div className="relative z-10 ml-4 md:ml-2 py-6">
 
-        <div className="flex  flex-col justify-center items-center min-h-[75vh] text-center">
+        <div className="flex flex-col justify-center items-center min-h-[75vh] text-center">
           <BlurText
             text="PeerTrade"
-            className="text-9xl font-bold tracking-widest hover:scale-150 transition duration-500 hover:text-cyan-400"
+            className="title text-9xl font-bold tracking-widest hover:scale-150 transition duration-500 hover:text-cyan-400"
           />
 
-          <p className="mt-8 italic text-blue-300 text-2xl">
+          <p className="mt-8 font-mono tracking-tighter text-blue-300 text-2xl font-bold">
             Rent, sell, or buy from your peers in seconds...
           </p>
 
           <div className="mt-12">
             <Link to="/listings">
-              <button className="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-semibold transition">
-                Explore Listings
+              <button className="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-bold transition">
+                Explore Products 
               </button>
             </Link>
           </div>

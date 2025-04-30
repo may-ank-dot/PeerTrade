@@ -2,9 +2,15 @@ body{
   background: rgb(17 24 39);
   color: white;
 }
+/* home Page */
+.title{
+  font-family: "Caveat", cursive;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: italic; 
+} 
 .lex{
   font-family: "Rubik", sans-serif;
-  font-weight: 400;
 }
 li{
   padding: 15px;
@@ -20,6 +26,7 @@ li:hover{
 .searchCategory{
     color: black;
 }
+/* logo */
 .logo{
     filter: brightness(3) contrast(1.1);
   transition: transform 0.3s ease, filter 0.3s ease;
@@ -27,4 +34,12 @@ li:hover{
 .logo:hover {
   transform: scale(1.05);
   filter: brightness(4) contrast(1.2);
+}
+
+/* Add listing */
+.inputClass{
+  border: 2px solid white;
+  padding: calc(var(--spacing) * 2);
+  width: 100%;
+  border-radius: .9rem;
 }

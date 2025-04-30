@@ -63,6 +63,7 @@ const searchListings = async (query,category) =>{
         if(category){
             sql += ` AND category = $${index}`;
             values.push(category);
+            index += 1;
         }
         const result = await db.query(sql,values);
         return result.rows;

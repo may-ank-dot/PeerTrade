@@ -43,7 +43,7 @@ const Login = () => {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
-        <h2 className="font-bold text-4xl">
+        <h2 className="lex text-4xl">
           <SplitText text="Login" />
         </h2>
 

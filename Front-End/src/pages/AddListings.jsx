@@ -1,7 +1,7 @@
 import React ,{useState}from "react";
 import API from "../services/api";
 import { useNavigate } from "react-router-dom";
-
+import SplitText from "../components/inComp/SplitText";
 const AddListings = () => {
     const [formState,setFormState] = useState({
         title: "",
@@ -39,8 +39,10 @@ const AddListings = () => {
         }
     };
     return(
-        <div className="max-w-lg mx-auto mt-8 p-6 bg-white shadow rounded">
-            <h2 className="font-semibold text-xl mb-4">Create Listing</h2>
+        <div className="max-w-lg mx-auto mt-20 p-6 shadow rounded">
+            <h2 className="lex text-5xl text-center mb-0 tracking-tighter">
+                <SplitText text="Create Listings"/>
+            </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
                 <input 
                     type="text" 
@@ -48,14 +50,14 @@ const AddListings = () => {
                     placeholder="Title" 
                     value={formState.title} 
                     onChange={handleChange} 
-                    className="border p-2 w-full"
+                    className="inputClass"
                 />
                 <textarea
                     name="description" 
                     placeholder="Description" 
                     value={formState.description} 
                     onChange={handleChange} 
-                    className="border p-2 w-full"
+                    className="inputClass"
                 />
                 <input 
                     type="number" 
@@ -63,7 +65,7 @@ const AddListings = () => {
                     placeholder="Price" 
                     value={formState.price} 
                     onChange={handleChange} 
-                    className="border p-2 w-full"
+                    className="inputClass"
                 />
                 <input 
                     type="text" 
@@ -71,13 +73,13 @@ const AddListings = () => {
                     placeholder="Category" 
                     value={formState.category} 
                     onChange={handleChange} 
-                    className="border p-2 w-full"
+                    className="inputClass"
                 />
                 <input 
                     type="file" 
                     name="image" 
                     onChange={handleImageChange} 
-                    className="border p-2 w-full"
+                    className="inputClass"
                 />
                 <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">Create</button>
             </form>
