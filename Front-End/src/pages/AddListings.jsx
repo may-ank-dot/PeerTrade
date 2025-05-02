@@ -9,7 +9,9 @@ const AddListings = () => {
         price:"",
         category: "",
     })
+    const [loading , setLoading] = useState(false);
     const [image,setImage] = useState(null);
+    const [error,setError] = useState("");
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -20,6 +22,7 @@ const AddListings = () => {
     }
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
 
         const formData = new FormData();
         formData.append("title",formState.title);
@@ -35,7 +38,10 @@ const AddListings = () => {
             });
             navigate("/listings");
         } catch(error){
+            setError("Fields cannot be empty!");
             console.error("Unable to create listings",error);
+        } finally {
+            setLoading(false);
         }
     };
     return(
@@ -43,6 +49,7 @@ const AddListings = () => {
             <h2 className="lex text-5xl text-center mb-0 tracking-tighter">
                 <SplitText text="Create Listings"/>
             </h2>
+            {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
             <form onSubmit={handleSubmit} className="space-y-4">
                 <input 
                     type="text" 
@@ -81,7 +88,10 @@ const AddListings = () => {
                     onChange={handleImageChange} 
                     className="inputClass"
                 />
-                <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">Create</button>
+                <button className="w-full py-3 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold transition-all hover:scale-105 duration-300 ease-in-out"
+                    disabled={loading}>
+                    {loading ? "Creating..." : "Create" } 
+                </button>
             </form>
         </div>
     )

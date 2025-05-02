@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import SplitText from "../components/inComp/SplitText";
 import { motion } from "framer-motion";
-import BlurText from "../components/inComp/BlurText";
 
 const Login = () => {
   const [email, setEmail] = useState("");

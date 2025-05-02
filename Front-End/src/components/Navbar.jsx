@@ -21,8 +21,6 @@ const Navbar = () => {
       <div className="flex gap-6 items-center">
         {user ? (
           <>
-            <Link to="/addlistings" className="hover:text-teal-400 transition">Add Product</Link>
-            <Link to="/mylistings" className="hover:text-teal-400 transition">My Products</Link>
             <span className="hidden sm:inline">Welcome, {user.name}</span>
             <button
               onClick={handleLogout}

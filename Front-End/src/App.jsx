@@ -40,8 +40,8 @@ const Layout = () => {
         <Route path="/listings/search" element={<SearchListings />} />
         <Route path="/listings" element={<Listings />} />
         <Route path="/listings/:id" element={<ListingDetails />} />
-        <Route path="/dashboard" element={<Dashboard />} />
         {/* ProtectedRoute */}
+        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/addlistings" element={<ProtectedRoute><AddListings /></ProtectedRoute>} />
         <Route path="/mylistings" element={<ProtectedRoute><MyListings /></ProtectedRoute>} />
       </Routes>
