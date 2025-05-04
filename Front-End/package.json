@@ -18,7 +18,7 @@
     "@tailwindcss/vite": "^4.0.15",
     "@toolpad/core": "^0.14.0",
     "axios": "^1.8.1",
-    "framer-motion": "^12.9.2",
+    "framer-motion": "^12.9.4",
     "gsap": "^3.12.7",
     "heroui-cli": "^1.2.3",
     "ogl": "^1.0.11",

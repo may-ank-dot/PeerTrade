@@ -13,6 +13,7 @@ import SearchListings from "./pages/SearchListings";
 import Dashboard from "./pages/Dashboard";
 import Sidebar from "./components/inComp/Sidebar";
 import { SidebarProvider } from "./context/SidebarContex";
+import UpdateListing from "./pages/UpdateListing";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ const Layout = () => {
         <Route path="/listings/search" element={<SearchListings />} />
         <Route path="/listings" element={<Listings />} />
         <Route path="/listings/:id" element={<ListingDetails />} />
+        <Route path="/edit/:id" element={<UpdateListing/>} />
         {/* ProtectedRoute */}
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/addlistings" element={<ProtectedRoute><AddListings /></ProtectedRoute>} />

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import API from "../services/api";
 import { SidebarContext } from "../context/SidebarContex";
-import ListingModal from "../components/inComp/ListingModal";
+import ListingModal from "../components/ListingModal";
 import { useNavigate } from "react-router-dom";
 import { Plus , MoreHorizontal } from "react-feather";
 
@@ -11,7 +11,6 @@ const Dashboard = () => {
   const [selectedListing, setSelectedListing] = useState(null);
   const { collapsed } = useContext(SidebarContext);
   const navigate = useNavigate();
-
   // Fetch the user's listings on mount
   useEffect(() => {
     API.get("/products/my/:id")
@@ -24,8 +23,8 @@ const Dashboard = () => {
 
   return (
     <div
-      className={`min-h-screen mt-12 bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 text-white transition-all duration-300 ${
-        collapsed ? "ml-[70px]" : "ml-[260px]"
+      className={`min-h-screen mt-12 bg-gradient-to-b text-white transition-all duration-300 ${
+        collapsed ? "ml-[70px]" : "ml-[260px]" 
       }`}
     >
       <div className="max-w-7xl mx-auto p-6 md:p-8">
@@ -59,7 +58,7 @@ const Dashboard = () => {
               onClick={() => navigate("/addlistings")}
               className="px-6 py-2 bg-cyan-500 hover:bg-cyan-600 rounded-lg text-white font-medium transition"
             >
-              Create your first listing
+              Add your first product...
             </button>
           </div>
         ) : (
@@ -67,8 +66,7 @@ const Dashboard = () => {
             {myListings.map((item) => (
               <div
                 key={item.id}
-                onClick={() => setSelectedListing(item)}
-                className="bg-gray-800 rounded-2xl overflow-hidden shadow-md hover:shadow-xl hover:shadow-cyan-900/20 transition-all duration-300 cursor-pointer border border-gray-700/50 group"
+                className=" rounded-2xl hover:scale-105 overflow-hidden shadow-md hover:shadow-xl hover:shadow-cyan-900/20 transition-all duration-300 border border-double border-blue-500 group"
               >
                 <div className="relative">
                   <img
@@ -87,8 +85,9 @@ const Dashboard = () => {
                   </div>
                   <div className="flex justify-between items-center mt-4">
                     <p className="text-cyan-400 font-bold text-lg">₹{item.price}</p>
-                    <button className="text-gray-400 hover:text-white transition-colors duration-200">
-                     <MoreHorizontal size={20}></MoreHorizontal> 
+                    <button onClick={() => setSelectedListing(item)}
+                      className="text-gray-400 hover:text-white transition-colors duration-200 cursor-pointer">
+                      <MoreHorizontal size={20}></MoreHorizontal> 
                     </button>
                   </div>
                 </div>
@@ -105,9 +104,7 @@ const Dashboard = () => {
             onDelete={async (id) => {
               if (!window.confirm("Are you sure you want to delete this listing?")) return;
               try {
-                await API.delete(`/products/${id}`, {
-                  withCredentials: true,
-                });
+                await API.delete(`/products/${id}`);
                 setMyListings((prev) =>
                   prev.filter((l) => l.id !== id)
                 );

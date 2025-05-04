@@ -34,7 +34,7 @@ const Sidebar = () => {
           <Link
             to={item.path}
             key={index}
-            className="group relative flex items-center gap-4 px-4 py-3 hover:bg-gray-700 transition-all rounded-md mx-2"
+            className="group relative flex items-center gap-4 px-3 py-3 hover:bg-gray-700 transition-all rounded-md mx-2"
           >
             <motion.div
               initial={{ opacity: 0, x: -10 }}
@@ -56,7 +56,7 @@ const Sidebar = () => {
             )}
 
             {collapsed && (
-              <span className="absolute left-16 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-all">
+              <span className="absolute left-16 bg-black text-white text-xs px-1 py-1 rounded opacity-0 group-hover:opacity-100 transition-all">
                 {item.name}
               </span>
             )}

@@ -7,8 +7,8 @@ const ListingModal = ({ listing, onClose, onDelete }) => {
   if (!listing) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center">
-      <div className="bg-gray-900 text-white p-6 rounded-lg w-full max-w-md relative">
+    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center">
+      <div className="bg-gray-900 text-white p-6 rounded-lg w-full max-w-md relative shadow-2xl">
         <button
           onClick={onClose}
           className="absolute top-3 right-3 text-gray-300 hover:text-white text-2xl"

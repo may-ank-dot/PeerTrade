@@ -1,9 +1,10 @@
 import db from "../db/connect.js";
-const createListings = async (title, description, price, category , image_url,user_id) => {
+import cloudinary from "../middleware/cloudinary.js";
+const createListings = async (title, description, price, category, public_id, image_url,user_id) => {
     try{
         const result = await db.query(
-            "INSERT INTO listings(title,description,price,category,image_url,user_id) VALUES($1,$2,$3,$4,$5,$6) RETURNING *"
-            ,[title , description, price,category,image_url,user_id]
+            "INSERT INTO listings(title,description,price,category,image_url,public_id, user_id) VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *"
+            ,[title , description, price,category,image_url,public_id, user_id]
         );
         return result.rows[0];
     } catch(error) {
@@ -74,9 +75,9 @@ const searchListings = async (query,category) =>{
     
 }
 
-const deleteListings = (id) => {
+const deleteListings = async (id) => {
     try{
-        const result = db.query("DELETE FROM listings WHERE id=$1 ",[id]);
+        const result = await db.query("DELETE FROM listings WHERE id=$1 ",[id]);
         return result.rows;
     }catch(error) {
         console.error("error while deleting listing",error);
