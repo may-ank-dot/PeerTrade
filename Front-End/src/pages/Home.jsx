@@ -1,13 +1,15 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import BlurText from "../components/inComp/BlurText";
 import Threads from "../components/inComp/VertexShader";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { SidebarContext } from "../context/SidebarContex";
 import ScrollVelocity from "../components/inComp/FramerMotion";
 import { ArrowRight, Search } from "react-feather";
 
 const Home = () => {
   const { collapsed } = useContext(SidebarContext);
+  const [query,setQuery]= useState(""); 
+  const navigate = useNavigate();
   const categoriesLine1 = [
     "Books Electronics Fashion Stationery"
   ];
@@ -15,6 +17,11 @@ const Home = () => {
     "Gadgets Sports Gear Services Furniture"
   ];
   
+  const handleSearch = (e) => {
+    e.preventDefault();
+    navigate(`/listings/search?query=${query}`);
+  };
+
   return (
     <div className={`relative min-h-screen bg-gray-950 overflow-x-hidden transition-all duration-300 ${
       collapsed ? "ml-[70px] w-[95%]" : "ml-[260px] "
@@ -39,21 +46,25 @@ const Home = () => {
           </p>
 
           {/* Search bar */}
-          <div className="mt-12 w-full max-w-2xl mx-auto px-4">
-            <div className="flex bg-gray-800/80 backdrop-blur-sm p-2 rounded-xl shadow-xl border border-cyan-900/30">
-              <input
-                type="text"
-                placeholder="Search for products..."
-                className="flex-1 bg-transparent border-0 focus:ring-0 text-white pl-4"
-              />
-              <button
-                type="submit"
-                className="px-6 py-2 bg-cyan-500 hover:bg-cyan-600 rounded-lg text-white font-medium transition-all"
-              >
-                <Search size={18} />
-              </button>
+            <div className="mt-12 w-full max-w-2xl mx-auto px-4">
+              <form onSubmit={handleSearch}>
+                <div className="flex bg-gray-800/80 backdrop-blur-sm p-2 rounded-xl shadow-xl border border-cyan-900/30">
+                  <input
+                    type="text"
+                    value={query}
+                    placeholder="Search for products..."
+                    onChange={(e) => setQuery(e.target.value)}
+                    className="flex-1 bg-transparent border-0 mr-2 focus:ring-0 text-white pl-4"
+                  />
+                  <button
+                    type="submit"
+                    className="px-6 py-2 bg-cyan-500 hover:bg-cyan-600 rounded-lg text-white font-medium transition-all"
+                  >
+                    <Search size={18} />
+                  </button>
+                </div>
+              </form>
             </div>
-          </div>
 
           {/* CTA Buttons */}
           <div className="mt-12 flex flex-col sm:flex-row gap-4">
