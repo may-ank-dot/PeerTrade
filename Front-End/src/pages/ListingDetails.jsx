@@ -8,7 +8,13 @@ const ListingDetails = () => {
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
   const { collapsed } = useContext(SidebarContext);
+  const [user,setUser] = useState([]);
   const navigate = useNavigate();
+  useEffect(() => {
+    API.get("/users/me")
+    .then((res) => setUser(res.data.user))
+    .catch((error)=>console.error("Something Went Wrong! fectching userData",error))
+  },[]);
 
   useEffect(() => {
     API.get(`/products/${id}`)   
@@ -154,7 +160,7 @@ const ListingDetails = () => {
                     </svg>
                   </div>
                   <div>
-                    <h4 className="text-white font-medium">{listing.name}</h4>
+                    <h4 className="text-white font-medium">{user.name}</h4>
                     <p className="text-gray-400 text-sm">Member since Jan 2023</p>
                   </div>
                 </div>
@@ -164,7 +170,7 @@ const ListingDetails = () => {
                       <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                       <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                     </svg>
-                    <span className="text-gray-300">{listing.email}</span>
+                    <span className="text-gray-300">{user.email}</span>
                   </div>
                   <div className="flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500 mr-2" viewBox="0 0 20 20" fill="currentColor">

@@ -8,7 +8,7 @@ const MyListings = () => {
   const { collapsed } = useContext(SidebarContext);
 
   useEffect(() => {
-    API.get("/products/my/:id", { withCredentials: true })
+    API.get("/products/my/:id")
       .then((res) => setMyListings(res.data))
       .catch((err) => console.error("Failed to fetch your listings", err));
   }, []);
