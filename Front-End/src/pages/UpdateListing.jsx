@@ -32,6 +32,7 @@ const UpdateListings = () => {
   useEffect(() => {
     const fetchListing = async () => {
       try {
+        // Make sure you're using the correct endpoint here
         const { data } = await API.get(`/products/${id}`);
         setFormState({
           title: data.title || "",
@@ -39,10 +40,10 @@ const UpdateListings = () => {
           price: data.price || "",
           category: data.category || "",
         });
-        setImagePreview(data.imageUrl); // Assume backend sends imageUrl
+        setImagePreview(data.image_url); // Assume backend sends image_url
       } catch (err) {
         setError("Failed to fetch listing details.");
-        console.error(err);
+        console.error("Fetch error:", err);
       } finally {
         setLoading(false);
       }
@@ -79,21 +80,34 @@ const UpdateListings = () => {
     }
 
     setLoading(true);
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("description", description);
-    formData.append("price", price);
-    formData.append("category", category);
-    if (image) formData.append("image", image);
-
+    
     try {
-      await API.put(`/products/${id}`, formData, {
+      // Important: Check if you need to use /update/:id instead of /products/:id
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("description", description);
+      formData.append("price", price);
+      formData.append("category", category);
+      
+      // If there's a new image, append it
+      if (image) {
+        formData.append("image", image);
+      } 
+      // If using existing image, pass the URL
+      else if (imagePreview && imagePreview.startsWith('http')) {
+        formData.append("image_url", imagePreview);
+      }
+
+      // Update the endpoint to match your backend route
+      const response = await API.put(`/update/${id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
+      
+      console.log("Update response:", response);
       navigate("/listings");
     } catch (err) {
+      console.error("Update error:", err);
       setError(err.response?.data?.message || "Failed to update listing.");
-      console.error(err);
     } finally {
       setLoading(false);
     }
