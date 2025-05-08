@@ -1,5 +1,5 @@
 import express from "express";
-import { getUserByEmail,createUser } from "../models/user.js";
+import {userDetails, getUserByEmail, createUser } from "../models/user.js";
 import passport from "../middleware/passportConfig.js";
 import ensureAuthenticated from "../middleware/ensureAuthenticated.js";
 
@@ -27,6 +27,18 @@ router.post("/logout", (req, res) => {
     });
 });
 
+// Creating get route to get user details via user_id
+router.get("/:id", async (req,res) => {
+    try{
+        const {id} = req.params;
+        const user = await userDetails(id);
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({message: "Error getting userDetails"});
+    }
+    
+
+})
 
 router.get("/me",ensureAuthenticated, (req, res) => {
     if (req.isAuthenticated()) {

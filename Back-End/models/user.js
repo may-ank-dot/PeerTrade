@@ -16,6 +16,15 @@ const createUser = async ( name, email, password ) => {
     }
 };
 
+const userDetails = async(id) => {
+    try{
+        const result = await db.query("SELECT * FROM users WHERE id=$1",[id]);
+        return result.rows[0];
+    } catch(error){
+        console.log("Error fetching user details: ",error);
+    }
+}
+
 const getUserByEmail = async(email) => {
     try{
         const result = await db.query("SELECT * FROM users WHERE email = $1",[email]);
@@ -24,4 +33,4 @@ const getUserByEmail = async(email) => {
         console.log("Something went wrong!",error);
     }
 }
-export {createUser , getUserByEmail};
+export {createUser , getUserByEmail, userDetails};

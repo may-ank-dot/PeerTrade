@@ -8,25 +8,38 @@ const ListingDetails = () => {
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
   const { collapsed } = useContext(SidebarContext);
-  const [user,setUser] = useState([]);
+  const [creator, setCreator] = useState(null);
   const navigate = useNavigate();
-  useEffect(() => {
-    API.get("/users/me")
-    .then((res) => setUser(res.data.user))
-    .catch((error)=>console.error("Something Went Wrong! fectching userData",error))
-  },[]);
 
   useEffect(() => {
     API.get(`/products/${id}`)   
       .then((res) => {
-        setListing(res.data.listing);
-        setLoading(false);
+        setListing(res.data);
+        // Once we have the listing, fetch the creator information
+        if (res.data && res.data.user_id) {
+          fetchCreatorDetails(res.data.user_id);
+        } else {
+          setLoading(false);
+        }
       })
       .catch((error) => {
         console.error("Error fetching listing details", error);
         setLoading(false);
       });
   }, [id]);
+
+  const fetchCreatorDetails = (creatorId) => {
+    API.get(`/users/${creatorId}`)
+      .then((res) => {
+        setCreator(res.data);
+        console.log(res.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching creator details", error);
+        setLoading(false);
+      });
+  };
 
   // Go back to listings
   const handleGoBack = () => {
@@ -160,8 +173,8 @@ const ListingDetails = () => {
                     </svg>
                   </div>
                   <div>
-                    <h4 className="text-white font-medium">{user.name}</h4>
-                    <p className="text-gray-400 text-sm">Member since Jan 2023</p>
+                    <h4 className="text-white font-medium">{creator ? creator.name : 'Loading...'}</h4>
+                    <p className="text-gray-400 text-sm">Member since {creator ? new Date(creator.created_at || Date.now()).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : 'Loading...'}</p>
                   </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -170,13 +183,13 @@ const ListingDetails = () => {
                       <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                       <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                     </svg>
-                    <span className="text-gray-300">{user.email}</span>
+                    <span className="text-gray-300">{creator ? creator.email : 'Loading...'}</span>
                   </div>
                   <div className="flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                     </svg>
-                    <span className="text-gray-300">Noida, India</span>
+                    <span className="text-gray-300">{creator && creator.location ? creator.location : 'Noida, India'}</span>
                   </div>
                 </div>
               </div>

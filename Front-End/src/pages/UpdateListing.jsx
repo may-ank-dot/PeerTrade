@@ -10,7 +10,7 @@ const UpdateListings = () => {
   const { collapsed } = useContext(SidebarContext);
   const { id } = useParams();
   const navigate = useNavigate();
-  const { authLoading } = useAuth(); // Optional: Only if using AuthContext
+  const { authLoading } = useAuth(); 
 
   const [formState, setFormState] = useState({
     title: "",
@@ -19,7 +19,7 @@ const UpdateListings = () => {
     category: "",
   });
 
-  const [loading, setLoading] = useState(true); // true initially
+  const [loading, setLoading] = useState(true);
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [error, setError] = useState("");
@@ -30,28 +30,33 @@ const UpdateListings = () => {
   ];
 
   useEffect(() => {
-    const fetchListing = async () => {
-      try {
-        // Make sure you're using the correct endpoint here
-        const { data } = await API.get(`/products/${id}`);
-        setFormState({
-          title: data.title || "",
-          description: data.description || "",
-          price: data.price || "",
-          category: data.category || "",
-        });
-        setImagePreview(data.image_url); // Assume backend sends image_url
-      } catch (err) {
-        setError("Failed to fetch listing details.");
-        console.error("Fetch error:", err);
-      } finally {
-        setLoading(false);
+  const fetchListing = async () => {
+    try {
+      const response = await API.get(`/products/${id}`)   
+      
+      const data = response.data;
+      console.log("Fetched listing data:", data);
+      
+      setFormState({
+        title: data.title || "",
+        description: data.description || "",
+        price: data.price || "",
+        category: data.category || "",
+      });
+      
+      if (data.image_url) {
+        setImagePreview(data.image_url);
       }
-    };
+    } catch (err) {
+      console.error("Error fetching listing:", err);
+      setError("Failed to fetch listing details. " + (err.response?.data?.error || err.message));
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    // Wait for auth context (if used)
-    if (!authLoading) fetchListing();
-  }, [id, authLoading]);
+  if (!authLoading) fetchListing();
+}, [id, authLoading]);
 
   const handleChange = (e) => {
     setFormState({ ...formState, [e.target.name]: e.target.value });
@@ -64,8 +69,6 @@ const UpdateListings = () => {
       const reader = new FileReader();
       reader.onloadend = () => setImagePreview(reader.result);
       reader.readAsDataURL(file);
-    } else {
-      setImagePreview(null);
     }
   };
 
@@ -80,34 +83,30 @@ const UpdateListings = () => {
     }
 
     setLoading(true);
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("price", price);
+    formData.append("category", category);
     
-    try {
-      // Important: Check if you need to use /update/:id instead of /products/:id
-      const formData = new FormData();
-      formData.append("title", title);
-      formData.append("description", description);
-      formData.append("price", price);
-      formData.append("category", category);
-      
-      // If there's a new image, append it
-      if (image) {
-        formData.append("image", image);
-      } 
-      // If using existing image, pass the URL
-      else if (imagePreview && imagePreview.startsWith('http')) {
-        formData.append("image_url", imagePreview);
-      }
+    // Only append image if a new one is selected
+    if (image) {
+      formData.append("image", image);
+    }
 
-      // Update the endpoint to match your backend route
-      const response = await API.put(`/update/${id}`, formData, {
+    try {
+      const updatePath = `/products/update/${id}`;
+      console.log("Update request path:", updatePath);
+      
+      const response = await API.put(updatePath, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      
-      console.log("Update response:", response);
       navigate("/listings");
     } catch (err) {
-      console.error("Update error:", err);
-      setError(err.response?.data?.message || "Failed to update listing.");
+      console.error("Error updating listing:", err);
+      const errorMessage = err.response?.data?.error || "Failed to update listing.";
+      const statusCode = err.response?.status || "No status";
+      setError(`Status: ${statusCode}. Message: ${errorMessage}`);
     } finally {
       setLoading(false);
     }
