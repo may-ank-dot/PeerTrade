@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import API from "../services/api";
 import { SidebarContext } from "../context/SidebarContex";
+import ReportModal from "../components/ReportModel";
 
 const ListingDetails = () => {
   const { id } = useParams();
@@ -10,12 +11,14 @@ const ListingDetails = () => {
   const { collapsed } = useContext(SidebarContext);
   const [creator, setCreator] = useState(null);
   const navigate = useNavigate();
+  
+  const [showReportModal, setShowReportModal] = useState(false);
 
   useEffect(() => {
     API.get(`/products/${id}`)   
       .then((res) => {
         setListing(res.data);
-        // Once we have the listing, fetch the creator information
+        console.log(res.data);
         if (res.data && res.data.user_id) {
           fetchCreatorDetails(res.data.user_id);
         } else {
@@ -29,10 +32,9 @@ const ListingDetails = () => {
   }, [id]);
 
   const fetchCreatorDetails = (creatorId) => {
-    API.get(`/users/${creatorId}`)
+    API.get(`/users/user/${creatorId}`)
       .then((res) => {
         setCreator(res.data);
-        console.log(res.data);
         setLoading(false);
       })
       .catch((error) => {
@@ -41,9 +43,75 @@ const ListingDetails = () => {
       });
   };
 
-  // Go back to listings
   const handleGoBack = () => {
     navigate(-1);
+  };
+
+  const openReportModal = () => {
+    setShowReportModal(true);
+  };
+
+  const closeReportModal = () => {
+    setShowReportModal(false);
+  };
+
+  const getListingTypeDisplay = (listingType) => {
+    switch(listingType) {
+      case 'sell': return 'For Sale';
+      case 'rent': return 'For Rent';
+      case 'both': return 'Sale & Rent';
+      default: return 'For Sale';
+    }
+  };
+
+  const getListingTypeColor = (listingType) => {
+    switch(listingType) {
+      case 'sell': return 'bg-green-500/20 text-green-400';
+      case 'rent': return 'bg-blue-500/20 text-blue-400';
+      case 'both': return 'bg-purple-500/20 text-purple-400';
+      default: return 'bg-green-500/20 text-green-400';
+    }
+  };
+
+  const renderPriceSection = () => {
+    if (!listing) return null;
+
+    const { listing_type, sell_price, rent_price } = listing;
+
+    switch(listing_type) {
+      case 'sell':
+        return (
+          <div className="mb-4">
+            <span className="text-green-400 text-2xl font-bold">₹{sell_price}</span>
+            <span className="text-gray-400 text-sm ml-2">Sale Price</span>
+          </div>
+        );
+      case 'rent':
+        return (
+          <div className="mb-4">
+            <span className="text-blue-400 text-2xl font-bold">₹{rent_price}</span>
+            <span className="text-gray-400 text-sm ml-2">Rent Price</span>
+          </div>
+        );
+      case 'both':
+        return (
+          <div className="mb-4 space-y-2">
+            <div className="flex items-center gap-4">
+              <div>
+                <span className="text-green-400 text-xl font-bold">₹{sell_price}</span>
+                <span className="text-gray-400 text-sm ml-2">to Buy</span>
+              </div>
+              <div className="text-gray-500">or</div>
+              <div>
+                <span className="text-blue-400 text-xl font-bold">₹{rent_price}</span>
+                <span className="text-gray-400 text-sm ml-2">to Rent</span>
+              </div>
+            </div>
+          </div>
+        );
+      default:
+        return null;
+    }
   };
 
   if (loading) {
@@ -105,11 +173,8 @@ const ListingDetails = () => {
           </button>
         </div>
 
-        {/* Main Content */}
         <div className="bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-700/50">
-          {/* Image and Quick Info */}
           <div className="lg:flex">
-            {/* Image Container */}
             <div className="lg:w-1/2 relative">
               {listing.image_url ? (
                 <img
@@ -126,23 +191,27 @@ const ListingDetails = () => {
                 </div>
               )}
               
-              {/* Quick Info Overlay */}
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-gray-900 p-6 lg:hidden">
-                <div className="flex justify-between items-center">
-                  <h1 className="text-2xl font-bold text-white">{listing.title}</h1>
-                  <span className="bg-cyan-500 text-white px-4 py-1 rounded-full text-lg font-bold">
-                    ₹{listing.price}
+                <div className="flex justify-between items-start">
+                  <div className="flex-1">
+                    <h1 className="text-2xl font-bold text-white mb-2">{listing.title}</h1>
+                    {renderPriceSection()}
+                  </div>
+                  <span className={`px-3 py-1 rounded-full text-sm font-medium ml-4 ${getListingTypeColor(listing.listing_type)}`}>
+                    {getListingTypeDisplay(listing.listing_type)}
                   </span>
                 </div>
               </div>
             </div>
             
-            {/* Quick Info for Desktop */}
             <div className="lg:w-1/2 p-8 lg:p-10">
               <div className="hidden lg:block">
-                <div className="flex flex-wrap gap-2 mb-2">
+                <div className="flex flex-wrap gap-2 mb-3">
                   <span className="bg-cyan-500/20 text-cyan-400 px-3 py-1 rounded-full text-sm font-medium">
                     {listing.category}
+                  </span>
+                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${getListingTypeColor(listing.listing_type)}`}>
+                    {getListingTypeDisplay(listing.listing_type)}
                   </span>
                   <span className="bg-gray-700/50 text-gray-300 px-3 py-1 rounded-full text-sm font-medium flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
@@ -151,8 +220,8 @@ const ListingDetails = () => {
                     Posted {new Date(listing.created_at || Date.now()).toLocaleDateString()}
                   </span>
                 </div>
-                <h1 className="text-3xl md:text-4xl font-bold mb-2 text-white">{listing.title}</h1>
-                <p className="text-cyan-400 text-2xl font-bold mb-4">₹{listing.price}</p>
+                <h1 className="text-3xl md:text-4xl font-bold mb-3 text-white">{listing.title}</h1>
+                {renderPriceSection()}
               </div>
 
               {/* Description */}
@@ -163,7 +232,6 @@ const ListingDetails = () => {
                 </p>
               </div>
 
-              {/* Seller Info */}
               <div className="mt-8 border-t border-gray-700 pt-6">
                 <h3 className="text-xl font-semibold text-white mb-4">Seller Information</h3>
                 <div className="flex items-center mb-4">
@@ -174,7 +242,7 @@ const ListingDetails = () => {
                   </div>
                   <div>
                     <h4 className="text-white font-medium">{creator ? creator.name : 'Loading...'}</h4>
-                    <p className="text-gray-400 text-sm">Member since {creator ? new Date(creator.created_at || Date.now()).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : 'Loading...'}</p>
+                    <p className="text-gray-399 text-sm">Member since {creator ? new Date(creator.created_at || Date.now()).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : 'Loading...'}</p>
                   </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -194,21 +262,56 @@ const ListingDetails = () => {
                 </div>
               </div>
 
-              {/* Action Buttons */}
               <div className="mt-8 flex flex-wrap gap-4">
-                <button className="flex-1 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-300 shadow-lg hover:shadow-cyan-500/20 flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z" />
-                    <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z" />
-                  </svg>
-                  Contact Seller
-                </button>
+                {listing.listing_type === 'both' ? (
+                  <>
+                    <button className="flex-1 bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-300 shadow-lg hover:shadow-green-500/20 flex items-center justify-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zM8 6V5a2 2 0 114 0v1H8zm2 6a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+                      </svg>
+                      Buy Now (₹{listing.sell_price})
+                    </button>
+                    <button className="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-300 shadow-lg hover:shadow-blue-500/20 flex items-center justify-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                      </svg>
+                      Rent (₹{listing.rent_price})
+                    </button>
+                  </>
+                ) : (
+                  <button className={`flex-1 ${
+                    listing.listing_type === 'rent' 
+                      ? 'bg-blue-500 hover:bg-blue-600' 
+                      : 'bg-green-500 hover:bg-green-600'
+                  } text-white font-semibold px-6 py-3 rounded-lg transition-all duration-300 shadow-lg flex items-center justify-center`}>
+                    {listing.listing_type === 'rent' ? (
+                      <>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                        </svg>
+                        Rent Now
+                      </>
+                    ) : (
+                      <>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zM8 6V5a2 2 0 114 0v1H8zm2 6a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+                        </svg>
+                        Buy Now
+                      </>
+                    )}
+                  </button>
+                )}
                 <button className="flex items-center justify-center px-4 py-3 border border-gray-600 rounded-lg hover:bg-gray-700 transition-colors">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
                   </svg>
                 </button>
-                <button className="flex items-center justify-center px-4 py-3 border border-gray-600 rounded-lg hover:bg-gray-700 transition-colors">
+                <button 
+                  className="flex items-center justify-center px-4 py-3 border border-gray-600 rounded-lg hover:bg-gray-700 transition-colors"
+                  onClick={openReportModal}
+                  aria-label="Report this listing"
+                  title="Report this listing"
+                >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                   </svg>
@@ -218,7 +321,6 @@ const ListingDetails = () => {
           </div>
         </div>
 
-        {/* Similar Listings Section */}
         <div className="mt-12">
           <h2 className="text-2xl font-bold text-cyan-400 mb-6">Similar Listings</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -236,6 +338,12 @@ const ListingDetails = () => {
           </div>
         </div>
       </div>
+
+      <ReportModal
+        isOpen={showReportModal}
+        onClose={closeReportModal}
+        listingId={id}
+      />
     </div>
   );
 };

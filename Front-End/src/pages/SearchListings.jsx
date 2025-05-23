@@ -10,6 +10,11 @@ const useQuery = () => {
   return new URLSearchParams(useLocation().search);
 };
 
+const categories = [
+  "Books", "Electronics", "Fashion", "Stationery",
+  "Gadgets", "Sports Gear", "Services", "Furniture", "Other"
+];
+
 const SearchListings = () => {
   const query = useQuery();
   const search = query.get("query");
@@ -82,10 +87,11 @@ const SearchListings = () => {
                     className="w-full px-4 py-3 rounded-lg appearance-none bg-gray-900 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all duration-200"
                   >
                     <option value="">All Categories</option>
-                    <option value="books">Books</option>
-                    <option value="electronics">Electronics</option>
-                    <option value="fashion">Fashion</option>
-                    <option value="services">Services</option>
+                    {categories.map((cat) => (
+                      <option key={cat} value={cat.toLowerCase()}>
+                        {cat}
+                      </option>
+                    ))}
                   </select>
                   <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
                     <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">

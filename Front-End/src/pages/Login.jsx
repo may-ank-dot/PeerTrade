@@ -33,10 +33,7 @@ const Login = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-950 relative overflow-hidden">
-      {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-cyan-900 via-gray-900 to-black opacity-80"></div>
-      
-      {/* Decorative circles */}
       <motion.div 
         className="absolute w-64 h-64 rounded-full bg-cyan-500/10 blur-3xl"
         initial={{ x: "-50vw", y: "-20vh" }}

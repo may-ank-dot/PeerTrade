@@ -10,7 +10,9 @@ const AddListings = () => {
     const [formState, setFormState] = useState({
         title: "",
         description: "",
-        price: "",
+        listing_type: "sell", 
+        sell_price: "",
+        rent_price: "",
         category: "",
     });
     const [loading, setLoading] = useState(false);
@@ -25,14 +27,22 @@ const AddListings = () => {
     ];
 
     const handleChange = (e) => {
-        setFormState({...formState, [e.target.name]: e.target.value});
+        const { name, value } = e.target;
+        setFormState({...formState, [name]: value});
+        
+        if (name === "listing_type") {
+            if (value === "sell") {
+                setFormState(prev => ({...prev, [name]: value, rent_price: ""}));
+            } else if (value === "rent") {
+                setFormState(prev => ({...prev, [name]: value, sell_price: ""}));
+            }
+        }
     };
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         setImage(file);
         
-        // Create preview URL
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
@@ -48,18 +58,35 @@ const AddListings = () => {
         e.preventDefault();
         setError("");
         
-        // Validation
-        if (!formState.title || !formState.description || !formState.price || !formState.category || !image) {
-            setError("All fields are required");
+        const { title, description, listing_type, sell_price, rent_price, category } = formState;
+        
+        if (!title || !description || !listing_type || !category || !image) {
+            setError("Title, description, listing type, category, and image are required");
+            return;
+        }
+
+        if (listing_type === "sell" && !sell_price) {
+            setError("Sell price is required for sale listings");
+            return;
+        }
+        if (listing_type === "rent" && !rent_price) {
+            setError("Rent price is required for rental listings");
+            return;
+        }
+        if (listing_type === "both" && (!sell_price || !rent_price)) {
+            setError("Both sell and rent prices are required for dual listings");
             return;
         }
         
         setLoading(true);
         const formData = new FormData();
-        formData.append("title", formState.title);
-        formData.append("description", formState.description);
-        formData.append("price", formState.price);
-        formData.append("category", formState.category);
+        formData.append("title", title);
+        formData.append("description", description);
+        formData.append("listing_type", listing_type);
+        formData.append("category", category);
+        
+        if (sell_price) formData.append("sell_price", sell_price);
+        if (rent_price) formData.append("rent_price", rent_price);
         formData.append("image", image);
         
         try {
@@ -118,21 +145,59 @@ const AddListings = () => {
                                 className="w-full bg-gray-700/50 border border-gray-600 focus:border-cyan-500 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-all"
                             />
                         </div>
+
+                        {/* Listing Type */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-300 mb-2">Listing Type</label>
+                            <select
+                                name="listing_type" 
+                                value={formState.listing_type} 
+                                onChange={handleChange} 
+                                className="w-full bg-gray-700/50 border border-gray-600 focus:border-cyan-500 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-all"
+                            >
+                                <option value="sell">For Sale</option>
+                                <option value="rent">For Rent</option>
+                                <option value="both">Both Sale & Rent</option>
+                            </select>
+                        </div>
                         
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-2">Price (₹)</label>
-                                <input 
-                                    type="number" 
-                                    name="price" 
-                                    placeholder="0.00" 
-                                    value={formState.price} 
-                                    onChange={handleChange} 
-                                    className="w-full bg-gray-700/50 border border-gray-600 focus:border-cyan-500 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-all"
-                                />
-                            </div>
-                            
-                            <div>
+                            {/* Sell Price */}
+                            {(formState.listing_type === "sell" || formState.listing_type === "both") && (
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                                        Sale Price (₹)
+                                    </label>
+                                    <input 
+                                        type="number" 
+                                        name="sell_price" 
+                                        placeholder="0.00" 
+                                        value={formState.sell_price} 
+                                        onChange={handleChange} 
+                                        className="w-full bg-gray-700/50 border border-gray-600 focus:border-cyan-500 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-all"
+                                    />
+                                </div>
+                            )}
+
+                            {/* Rent Price */}
+                            {(formState.listing_type === "rent" || formState.listing_type === "both") && (
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                                        Rent Price (₹/month)
+                                    </label>
+                                    <input 
+                                        type="number" 
+                                        name="rent_price" 
+                                        placeholder="0.00" 
+                                        value={formState.rent_price} 
+                                        onChange={handleChange} 
+                                        className="w-full bg-gray-700/50 border border-gray-600 focus:border-cyan-500 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-all"
+                                    />
+                                </div>
+                            )}
+
+                            {/* Category - takes full width when only one price field is shown */}
+                            <div className={formState.listing_type === "both" ? "" : "md:col-span-2"}>
                                 <label className="block text-sm font-medium text-gray-300 mb-2">Category</label>
                                 <select
                                     name="category" 

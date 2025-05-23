@@ -28,7 +28,7 @@ router.post("/logout", (req, res) => {
 });
 
 // Creating get route to get user details via user_id
-router.get("/:id", async (req,res) => {
+router.get("/user/:id", async (req,res) => {
     try{
         const {id} = req.params;
         const user = await userDetails(id);

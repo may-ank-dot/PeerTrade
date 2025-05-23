@@ -5,6 +5,7 @@ import userRoutes from "./routes/userRoutes.js";
 import productRoutes from "./routes/listingRoutes.js";
 import bodyParser from 'body-parser';
 import passport from './middleware/passportConfig.js';
+import reportRoutes from "./routes/reportRoutes.js"
 
 const app = express();
 const PORT = 3000;  
@@ -30,6 +31,7 @@ app.use(cors({
 }))
 app.use("/users",userRoutes);
 app.use("/products",productRoutes);
+app.use("/reports",reportRoutes);
 
 
 app.listen(PORT,(err)=> {
